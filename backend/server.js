@@ -162,6 +162,8 @@ app.post('/run-script', async (req, res) => {
             message: 'Script executed successfully.'
         });
     } catch (error) {
+        console.log('Error running the script.');
+        console.log(error);
         res.status(500).json({
             message: 'Error running the script.'
         });
