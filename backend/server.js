@@ -15,7 +15,7 @@ app.post('/run-script', async (req, res) => {
     const { email, password } = req.body;
     let count = 0;
     try {
-        while (count < 100) {
+        while (count < 10) {
             let postUrl = await getPostUrl(email, password);
             if (postUrl) {
                 await likePost(postUrl);
