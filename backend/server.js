@@ -9,6 +9,8 @@ app.use(express.json());
 const getPostUrl = require('./getPostUrl');
 const likePost = require('./likePost');
 
+app.get('/', (req, res) => res.status(200).json({ message: 'Server started successfully.' }));
+
 app.post('/run-script', async (req, res) => {
     const { email, password } = req.body;
     let count = 0;
@@ -21,9 +23,9 @@ app.post('/run-script', async (req, res) => {
             count++;
         }
     } catch (error) {
-        return res.status(500).send('An error occurred while trying to run the script.');
+        return res.status(500).status.json({ message: 'An error occurred while trying to run the script.' });
     }
-    return res.send('Script executed successfully.');
+    return res.status(200).json({ message: 'Script executed successfully.' });
 })
 
 app.listen(PORT, () => {
