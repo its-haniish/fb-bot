@@ -9,7 +9,9 @@ app.use(express.json());
 const getPostUrl = require('./getPostUrl');
 const likePost = require('./likePost');
 
-app.get('/', (req, res) => res.status(200).json({ message: 'Server started successfully.' }));
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "Server started successfully." })
+})
 
 app.post('/run-script', async (req, res) => {
     const { email, password } = req.body;
