@@ -31,7 +31,9 @@ const getPostUrl = async (email, password) => {
 
         console.log('Login successful, navigating to notifications page...');
 
-        await page.goto('https://www.facebook.com/notifications');
+        await page.goto('https://www.facebook.com/notifications', {
+            waitUntil: 'networkidle0', timeout: 60000
+        });
 
         console.log('Finding the span with "tagged" text...');
 
