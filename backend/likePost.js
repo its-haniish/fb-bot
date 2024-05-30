@@ -22,7 +22,7 @@ const likePost = async (postUrl) => {
             console.log(`Launching browser for account: ${email}`);
             browser = await puppeteer.launch({
                 headless: true,
-                args: ['--disable-notifications'],
+                args: ['--disable-notifications', '--no-sandbox', '--disable-setuid-sandbox'],
                 executablePath: '/opt/render/.cache/puppeteer/chrome/linux-124.0.6367.91/chrome-linux64/chrome'
             });
             const page = await browser.newPage();

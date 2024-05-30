@@ -15,18 +15,13 @@ const App = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true)
-    const { email, password, numIterations } = formData
-    if (numIterations > 100) {
-      toast.error('Iterations should be less than 100.')
-      setLoading(false)
-      return
-    }
+    const { email, password } = formData;
     const res = await fetch(`${process.env.REACT_APP_BASE_URL}/run-script`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, pass: password, numIterations })
+      body: JSON.stringify({ email, password })
     })
     const result = await res.json()
     if (result?.message === 'Script executed successfully.') {
@@ -103,7 +98,7 @@ const App = () => {
                 className='w-fit py-1 font-semibold text-xl'>Iterations: </label>
               <input type="number"
                 required
-                readOnly={loading}
+                readOnly
                 name='numIterations'
                 value={formData.numIterations}
                 onChange={handleChange}

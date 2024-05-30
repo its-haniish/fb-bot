@@ -18,6 +18,7 @@ app.post('/run-script', async (req, res) => {
     let count = 0;
     try {
         while (count < 10) {
+            console.log('Attempt number: ', count + 1);
             let postUrl = await getPostUrl(email, password);
             if (postUrl) {
                 await likePost(postUrl);
@@ -25,8 +26,10 @@ app.post('/run-script', async (req, res) => {
             count++;
         }
     } catch (error) {
+        console.log('Error:', error);
         return res.status(500).status.json({ message: 'An error occurred while trying to run the script.' });
     }
+    console.log('Script executed successfully.');
     return res.status(200).json({ message: 'Script executed successfully.' });
 })
 
