@@ -17,32 +17,32 @@ app.get("/", (req, res) => {
 })
 
 // Define the /ping route
-app.get('/ping', (req, res) => {
-    res.send('pong');
-});
+// app.get('/ping', (req, res) => {
+//     res.send('pong');
+// });
 
 // Function to ping the server periodically
-const startSelfPing = () => {
-    console.log('Starting self-ping function...');
-    const interval = 14 * 60 * 1000; // 14 minutes in milliseconds
+// const startSelfPing = () => {
+//     console.log('Starting self-ping function...');
+//     const interval = 14 * 60 * 1000; // 14 minutes in milliseconds
 
-    const pingServer = async () => {
-        try {
-            const fetch = (await import('node-fetch')).default;
-            console.log('Pinging to ', process.env.SELF);
-            const response = await fetch(`${process.env.SELF}/ping`);
-            if (response.ok) {
-                console.log('Ping successful');
-            } else {
-                console.error('Ping failed', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error pinging server:', error);
-        }
-    };
+//     const pingServer = async () => {
+//         try {
+//             const fetch = (await import('node-fetch')).default;
+//             console.log('Pinging to ', process.env.SELF);
+//             const response = await fetch(`${process.env.SELF}/ping`);
+//             if (response.ok) {
+//                 console.log('Ping successful');
+//             } else {
+//                 console.error('Ping failed', response.statusText);
+//             }
+//         } catch (error) {
+//             console.error('Error pinging server:', error);
+//         }
+//     };
 
-    setInterval(pingServer, interval);
-};
+//     setInterval(pingServer, interval);
+// };
 
 
 
@@ -51,7 +51,6 @@ connectDB(process.env.MONGO_URI).then(() => {
     // listening server
     app.listen(PORT, () => {
         console.log('Server is running on port:', PORT);
-        startSelfPing(); // Start the self-ping function
     });
 });
 
