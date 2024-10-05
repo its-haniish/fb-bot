@@ -1,38 +1,64 @@
-require('dotenv').config();
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const PORT = process.env.PORT || 8080;
-app.use(cors());
-app.use(express.json());
+const { Worker } = require('worker_threads');
 
-const getPostUrl = require('./getPostUrl');
-const likePost = require('./likePost');
+// Fake ID scripts
+const fakeIds = [
+    './fake_ids/id_1.js',
+    // Add more fake ID paths here if needed
+];
 
-app.get('/', (req, res) => {
-    res.status(200).json({ message: "Server started successfully." })
-})
+// Main ID script (for the main account)
+const mainIdScript = './main_id/main_id.js';
 
-app.post('/run-script', async (req, res) => {
-    const { email, password } = req.body;
-    let count = 0;
-    try {
-        while (count < 10) {
-            console.log('Attempt number: ', count + 1);
-            let postUrl = await getPostUrl(email, password);
-            if (postUrl) {
-                await likePost(postUrl);
-            }
-            count++;
-        }
-    } catch (error) {
-        console.log('Error:', error);
-        return res.status(500).status.json({ message: 'An error occurred while trying to run the script.' });
-    }
-    console.log('Script executed successfully.');
-    return res.status(200).json({ message: 'Script executed successfully.' });
-})
+// Create and store workers
+let workers = [];
+let mainWorker = new Worker(mainIdScript); // Main account worker
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+console.log('Main account worker started.');
+
+// // Spawn workers for each fake ID
+// fakeIds.forEach((idScript, index) => {
+//     console.log(`Starting worker for fake ID ${index + 1}...`);
+//     const worker = new Worker(idScript);
+//     workers.push(worker);
+
+//     // Listen for messages from each fake ID worker
+//     worker.on('message', (message) => {
+//         console.log(`Message from worker ${index + 1}:`, message);
+//     });
+
+//     // Log errors from fake ID workers
+//     worker.on('error', (err) => {
+//         console.error(`Error in worker ${index + 1}:`, err);
+//     });
+
+//     // Log when fake ID workers exit
+//     worker.on('exit', (code) => {
+//         console.log(`Worker ${index + 1} exited with code ${code}`);
+//     });
+// });
+
+// // Listen for messages from the main account worker
+// mainWorker.on('message', (message) => {
+//     console.log('Message from main worker:', message);
+
+//     if (message.action === 'newTag' && message.postUrl) {
+//         console.log(`Main account detected new tag on post: ${message.postUrl}`);
+
+//         // Trigger fake accounts to like the post
+//         workers.forEach((worker, index) => {
+//             console.log(`Sending like command to worker ${index + 1} for post: ${message.postUrl}`);
+//             worker.postMessage({ action: 'like', postUrl: message.postUrl });
+//         });
+//     }
+// });
+
+// Log errors from the main account worker
+mainWorker.on('error', (err) => {
+    console.error('Error in main worker:', err);
 });
+
+// Log when the main account worker exits
+mainWorker.on('exit', (code) => {
+    console.log(`Main worker exited with code ${code}`);
+});
+
